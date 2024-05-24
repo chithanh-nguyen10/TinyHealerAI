@@ -16,5 +16,5 @@ jobs:
           privateKey: ${{ secrets.PRIVATE_SSH_KEY }}
           command: |
             cd /opt/huy-dev/TinyHealerAI
-            git pull
+            sudo git pull
             sudo docker-compose up -d --build
