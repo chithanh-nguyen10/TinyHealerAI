@@ -1,12 +1,13 @@
 from data_processing import *
 
 class Diagnostic:
-    def __init__(self, healthProblemDict, symptomDict, anamnesisDict):
+    def __init__(self, healthProblemDict, symptomDict, anamnesisDict, familyanamnesisDict):
         self.healthProblemDict = healthProblemDict
         self.symptomDict = symptomDict
         self.anamnesisDict = anamnesisDict
+        self.familyanamnesisDict = familyanamnesisDict
     
-    def diagnose(self, symptoms, anamnesis):
+    def diagnose(self, symptoms, anamnesis, familyanamnesis):
         self.preData = dict()
         for symptom in symptoms:
             for healthProblem in self.symptomDict[symptom]:
@@ -16,14 +17,21 @@ class Diagnostic:
                     self.preData[healthProblem["health-problems"]] = int(healthProblem["characteristic-level"])
         
         for healthProblem in anamnesis:
+            for anamnesisItem in self.familyanamnesisDict[healthProblem]:
+                try:
+                    self.preData[anamnesisItem["id"]] = self.preData[anamnesisItem["id"]] + int(anamnesisItem["characteristic-level"])
+                except Exception:
+                    pass
+        
+        for healthProblem in familyanamnesis:
             for anamnesisItem in self.anamnesisDict[healthProblem]:
                 try:
-                    self.preData[anamnesisItem] = self.preData[anamnesisItem] + 1
+                    self.preData[anamnesisItem["id"]] = self.preData[anamnesisItem["id"]] + int(anamnesisItem["characteristic-level"])
                 except Exception:
                     pass
 
         self.sortedData = {k: v for k, v in sorted(self.preData.items(), key=lambda item: item[1], reverse = True)}
-
+        # print(self.sortedData)
         maxValues = []
         for key, val in self.sortedData.items():
             if val not in maxValues: maxValues.append(val)
@@ -41,6 +49,8 @@ if __name__ == '__main__':
     read = ReadData("private_key.json")
     read.getData()
     symptoms = ["eye02", "urinary01", "lung01", "digest01"]
-    anamnesis = ["eye02", "lung01"]
-    diagnostic = Diagnostic(read.healthProblemDict, read.symptomDict, read.anamnesisDict)
-    print(diagnostic.diagnose(symptoms, anamnesis))
+    anamnesis = ["digest01", "ent01"]
+    familyanamnesis = ["digest01"]
+    diagnostic = Diagnostic(read.healthProblemDict, read.symptomDict, read.anamnesisDict, read.familyanamnesisDict)
+    # print( read.anamnesisDict)
+    print(diagnostic.diagnose(symptoms, anamnesis, familyanamnesis))

@@ -32,7 +32,7 @@ class ReadData:
         self.healthProblemDict = dict()
         for doc in docs:
             t = doc.to_dict()
-            self.healthProblemDict[t['id']] = {'name': t['name'], 'description': t['description']}
+            self.healthProblemDict[t['id']] = t['name']
 
 
         collection_ref = self.db.collection("symptom")
@@ -52,9 +52,20 @@ class ReadData:
         for doc in docs:
             t = doc.to_dict()
             try:
-                self.anamnesisDict[t['health-problem-B']].append(t['health-problem-A'])
+                self.anamnesisDict[t['id-A']].append({"id": t['health-problem'], "characteristic-level" : t['characteristic-level']})
             except Exception:
-                self.anamnesisDict[t['health-problem-B']] = [t['health-problem-A']]
+                self.anamnesisDict[t['id-A']] = [{"id" :  t['health-problem'], "characteristic-level" : t['characteristic-level']}]
+        
+
+        collection_ref = self.db.collection("anamnesis-family")
+        docs = collection_ref.stream()
+        self.familyanamnesisDict = dict()
+        for doc in docs:
+            t = doc.to_dict()
+            try:
+                self.familyanamnesisDict[t['id-A']].append({"id": t['health-problem'], "characteristic-level" : t['characteristic-level']})
+            except Exception:
+                self.familyanamnesisDict[t['id-A']] = [{"id" :  t['health-problem'], "characteristic-level" : t['characteristic-level']}]
 
 
 if __name__ == '__main__':

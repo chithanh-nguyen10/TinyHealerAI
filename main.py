@@ -8,7 +8,7 @@ import os
 
 read = ReadData("private_key.json")
 read.getData()
-diagnostic = Diagnostic(read.healthProblemDict, read.symptomDict, read.anamnesisDict)
+diagnostic = Diagnostic(read.healthProblemDict, read.symptomDict, read.anamnesisDict, read.familyanamnesisDict)
 
 app = FastAPI()
 
@@ -17,12 +17,15 @@ SECRET_TOKEN = os.getenv("SECRET_TOKEN")
 class dataInput(BaseModel):
     symptoms: List[str]
     anamnesis: List[str]
+    familyanamnesis: List[str]
 
 @app.get("/update")
-async def update():
+async def update(token: str = Header(None)):
+    if token != SECRET_TOKEN:
+        return {"error": "Invalid token"}
+
     read.getData()
-    diagnostic = Diagnostic(read.healthProblemDict, read.symptomDict, read.anamnesisDict)
-    print(read.healthProblemDict)
+    diagnostic = Diagnostic(read.healthProblemDict, read.symptomDict, read.anamnesisDict, read.familyanamnesisDict)
     return {"message": "succeed"}
 
 
@@ -31,5 +34,5 @@ async def diagnose(input: dataInput, token: str = Header(None)):
     if token != SECRET_TOKEN:
         return {"error": "Invalid token"}
 
-    results = diagnostic.diagnose(input.symptoms, input.anamnesis)
+    results = diagnostic.diagnose(input.symptoms, input.anamnesis, input.familyanamnesis)
     return {"health_problems": results}
