@@ -19,6 +19,7 @@ class dataInput(BaseModel):
     anamnesis: List[str]
     familyanamnesis: List[str]
 
+#test
 @app.get("/update")
 async def update(token: str = Header(None)):
     if token != SECRET_TOKEN:
