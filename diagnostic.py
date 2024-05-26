@@ -16,14 +16,14 @@ class Diagnostic:
                 except Exception:
                     self.preData[healthProblem["health-problems"]] = int(healthProblem["characteristic-level"])
         
-        for healthProblem in anamnesis:
+        for healthProblem in familyanamnesis:
             for anamnesisItem in self.familyanamnesisDict[healthProblem]:
                 try:
                     self.preData[anamnesisItem["id"]] = self.preData[anamnesisItem["id"]] + int(anamnesisItem["characteristic-level"])
                 except Exception:
                     pass
         
-        for healthProblem in familyanamnesis:
+        for healthProblem in anamnesis:
             for anamnesisItem in self.anamnesisDict[healthProblem]:
                 try:
                     self.preData[anamnesisItem["id"]] = self.preData[anamnesisItem["id"]] + int(anamnesisItem["characteristic-level"])
@@ -31,7 +31,7 @@ class Diagnostic:
                     pass
 
         self.sortedData = {k: v for k, v in sorted(self.preData.items(), key=lambda item: item[1], reverse = True)}
-        # print(self.sortedData)
+
         maxValues = []
         for key, val in self.sortedData.items():
             if val not in maxValues: maxValues.append(val)
