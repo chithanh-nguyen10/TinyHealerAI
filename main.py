@@ -1,4 +1,3 @@
-#Update database
 from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel
 from typing import List
@@ -10,6 +9,7 @@ import os
 read = ReadData("private_key.json")
 read.getData()
 diagnostic = Diagnostic(read.healthProblemDict, read.symptomDict, read.anamnesisDict, read.familyanamnesisDict)
+# print(read.healthProblemDict)
 
 app = FastAPI()
 
@@ -20,7 +20,6 @@ class dataInput(BaseModel):
     anamnesis: List[str]
     familyanamnesis: List[str]
 
-#test
 @app.get("/update")
 async def update(token: str = Header(None)):
     if token != SECRET_TOKEN:
@@ -28,6 +27,7 @@ async def update(token: str = Header(None)):
 
     read.getData()
     diagnostic = Diagnostic(read.healthProblemDict, read.symptomDict, read.anamnesisDict, read.familyanamnesisDict)
+    print(read.symptomDict)
     return {"message": "succeed"}
 
 
