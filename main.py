@@ -35,6 +35,5 @@ async def update(token: str = Header(None)):
 async def diagnose(input: dataInput, token: str = Header(None)):
     if token != SECRET_TOKEN:
         return {"error": "Invalid token"}
-
     results = diagnostic.diagnose(input.symptoms, input.anamnesis, input.familyanamnesis)
     return {"health_problems": results}
