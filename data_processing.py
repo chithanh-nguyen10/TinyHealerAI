@@ -41,9 +41,9 @@ class ReadData:
         for doc in docs:
             t = doc.to_dict()
             try:
-                self.symptomDict[t['id']].append({'name': t['name'], 'health-problems': t['health-problems'], 'characteristic-level' : t['characteristic-level']})
+                self.symptomDict[t['id']].append({'name': t['name'], 'health-problems': t['health-problem'], 'characteristic-level' : t['characteristic-level']})
             except Exception:
-                self.symptomDict[t['id']] = [{'name': t['name'], 'health-problems': t['health-problems'], 'characteristic-level' : t['characteristic-level']}]
+                self.symptomDict[t['id']] = [{'name': t['name'], 'health-problems': t['health-problem'], 'characteristic-level' : t['characteristic-level']}]
         
 
         collection_ref = self.db.collection("anamnesis")
