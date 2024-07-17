@@ -3,4 +3,4 @@ WORKDIR /app
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 COPY . .
-CMD ["fastapi", "run", "main.py", "--port", "80"]
+RUN fastpi run main.py --port 80
